@@ -6,9 +6,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Technician extends User {
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "technician", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Issue> issues;
 

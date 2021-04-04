@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "machine")
 public class Machine {
@@ -22,13 +24,14 @@ public class Machine {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@Column(name = "name")
-	private String name;
+	@Column(name = "serialNumber")
+	private String serialNumber;
 	
 	@ManyToOne()
     @JoinColumn(name = "company_id")
     private Company company;
 	
+	@JsonIgnore
 	@ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
@@ -46,10 +49,19 @@ public class Machine {
 	
 	public Machine() {	}
 
-	public Machine(long id, String name) {
+	public Machine(String serialNumber, Company company, Product product) {
+		super();
+		this.serialNumber = serialNumber;
+		this.company = company;
+		this.product = product;
+	}
+	
+	public Machine(long id, String serialNumber, Company company, Product product) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.serialNumber = serialNumber;
+		this.company = company;
+		this.product = product;
 	}
 
 	public long getId() {
@@ -60,12 +72,12 @@ public class Machine {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getSerialNumber() {
+		return serialNumber;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 	
 	public Company getCompany() {
@@ -94,6 +106,6 @@ public class Machine {
 
 	@Override
 	public String toString() {
-		return "Machine [id=" + id + ", name=" + name + "]";
+		return "Machine [id=" + id + ", serialNumber=" + serialNumber + "]";
 	}
 }

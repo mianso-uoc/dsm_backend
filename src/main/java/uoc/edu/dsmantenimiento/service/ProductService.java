@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import uoc.edu.dsmantenimiento.model.Company;
 import uoc.edu.dsmantenimiento.model.Manufacturer;
 import uoc.edu.dsmantenimiento.model.Product;
 import uoc.edu.dsmantenimiento.repository.ProductRepository;

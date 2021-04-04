@@ -26,8 +26,8 @@ public class Product {
 	@Column(name = "name")
 	private String name;
 	
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Machine> machines;
+//	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Machine> machines;
 	
 	@JsonIgnore
 	@ManyToOne()
@@ -63,13 +63,13 @@ public class Product {
 		this.name = name;
 	}
 	
-	public List<Machine> getMachines() {
-		return machines;
-	}
-
-	public void setMachines(List<Machine> machines) {
-		this.machines = machines;
-	}
+//	public List<Machine> getMachines() {
+//		return machines;
+//	}
+//
+//	public void setMachines(List<Machine> machines) {
+//		this.machines = machines;
+//	}
 
 	public Manufacturer getManufacturer() {
 		return manufacturer;

@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "company")
 public class Company {
@@ -36,6 +38,7 @@ public class Company {
 	@Column(name = "phone")
 	private String phone;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Machine> machines;
 	
@@ -44,16 +47,14 @@ public class Company {
     private City city;
 
 	public Company() {}
-
-	public Company(String name, String address, Float latitude, Float longitude, String phone, List<Machine> machines,
-			City city) {
+	
+	public Company(String name, String address, Float latitude, Float longitude, String phone, City city) {
 		super();
 		this.name = name;
 		this.address = address;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.phone = phone;
-		this.machines = machines;
 		this.city = city;
 	}
 

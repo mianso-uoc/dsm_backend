@@ -30,9 +30,8 @@ public class Comment {
 	
 	public Comment() {	}
 
-	public Comment(long id, String text) {
+	public Comment(String text, User user) {
 		super();
-		this.id = id;
 		this.text = text;
 	}
 

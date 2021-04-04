@@ -63,6 +63,10 @@ public class Issue {
     @JoinColumn(name = "technician_id")
     private Technician technician;
 	
+	@ManyToOne()
+    @JoinColumn(name = "company_id")
+    private Company company;
+	
 	public Issue() {	}
 
 	public Issue(String title, String description) {
