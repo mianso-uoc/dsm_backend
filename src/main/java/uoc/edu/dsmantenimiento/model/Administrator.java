@@ -9,12 +9,12 @@ public class Administrator extends User {
 		super();
 	}
 	
-	public Administrator(String email, String name) {
-		super(email, name);
+	public Administrator(String email, String name, String password) {
+		super(email, name, password);
 	}
 
-	public Administrator(long id, String email, String name) {
-		super(id, email, name);
+	public Administrator(long id, String email, String name, String password) {
+		super(id, email, name, password);
 	}
 
 	

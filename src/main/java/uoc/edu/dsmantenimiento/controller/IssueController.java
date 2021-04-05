@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,7 +40,7 @@ public class IssueController {
 	CommentService commentService;
 
 	@GetMapping("/issues/{startDate}/{endDate}")
-	public ResponseEntity<List<Issue>> getIssuesByCompany(@PathVariable Date startDate, @PathVariable Date endDate) {
+	public ResponseEntity<List<Issue>> getIssuesByCompany(@PathVariable @DateTimeFormat(iso=ISO.DATE) Date startDate, @PathVariable @DateTimeFormat(iso=ISO.DATE) Date endDate) {
 		try {
 			List<Issue> issues = issueService.getIssues(startDate, endDate);
 
@@ -96,7 +98,7 @@ public class IssueController {
 	@PostMapping("/issues")
 	public ResponseEntity<Issue> createIssue(@RequestBody Issue issue) {
 		try {
-			Issue _issue = issueService.editIssue(new Issue(issue.getTitle(), issue.getDescription()));
+			Issue _issue = issueService.editIssue(new Issue(issue.getTitle(), issue.getDescription(), issue.getTechnician(), issue.getCompany()));
 			return new ResponseEntity<>(_issue, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,6 +112,13 @@ public class IssueController {
 		if (issueData.isPresent()) {
 			Issue _issue = issueData.get();
 			_issue.setTitle(issue.getTitle());
+			_issue.setCompany(issue.getCompany());
+			_issue.setCreateDate(issue.getCreateDate());
+			_issue.setDescription(issue.getDescription());
+			_issue.setStatus(issue.getStatus());
+			_issue.setTechnician(issue.getTechnician());
+			_issue.setSolution(issue.getSolution());
+			_issue.setTotalPrice(issue.getTotalPrice());
 			_issue.setDescription(issue.getDescription());
 			return new ResponseEntity<>(issueService.editIssue(_issue), HttpStatus.OK);
 		} else {
@@ -152,7 +161,7 @@ public class IssueController {
 		try {
 			Optional<Issue> issue = issueService.getIssue(id);
 			if (issue.isPresent()) {
-				Document _document = documentService.editDocument(new Document(document.getFileName(), document.getFile(), issue.get()));
+				Document _document = documentService.editDocument(new Document(document.getFileName(), document.getFile(), issue.get(), document.getTechnician()));
 				return new ResponseEntity<>(_document, HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -178,7 +187,7 @@ public class IssueController {
 		try {
 			Optional<Issue> issue = issueService.getIssue(id);
 			if (issue.isPresent()) {
-				Comment _comment = commentService.editComment(new Comment(comment.getText(), comment.getUser()));
+				Comment _comment = commentService.editComment(new Comment(comment.getText(), issue.get(), comment.getUser()));
 				return new ResponseEntity<>(_comment, HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

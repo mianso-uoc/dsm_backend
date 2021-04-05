@@ -47,6 +47,10 @@ public class UserService {
 		return userRepository.findById(id);
 	}
 	
+	public Optional<Customer> getCustomer(Long id) {
+		return customerRepository.findById(id);
+	}
+	
 	public User editUser(User user) {
 		return userRepository.save(user);
 	}

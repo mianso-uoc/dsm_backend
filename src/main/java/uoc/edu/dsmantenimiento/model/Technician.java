@@ -12,19 +12,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Technician extends User {
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "technician", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "technician", cascade = CascadeType.ALL)
     private List<Issue> issues;
 
 	public Technician() {
 		super();
 	}
 
-	public Technician(String email, String name) {
-		super(email, name);
+	public Technician(String email, String name, String password) {
+		super(email, name, password);
 	}
 	
-	public Technician(long id, String email, String name) {
-		super(id, email, name);
+	public Technician(long id, String email, String name, String password) {
+		super(id, email, name, password);
 	}
 	
 	public List<Issue> getIssues() {

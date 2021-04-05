@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 @Entity
 @Table(name = "comment")
 public class Comment {
@@ -20,6 +23,7 @@ public class Comment {
 	@Column(name = "text")
 	private String text;
 	
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@ManyToOne()
     @JoinColumn(name = "issue_id")
     private Issue issue;
@@ -30,9 +34,11 @@ public class Comment {
 	
 	public Comment() {	}
 
-	public Comment(String text, User user) {
+	public Comment(String text, Issue issue, User user) {
 		super();
 		this.text = text;
+		this.user = user;
+		this.issue = issue;
 	}
 
 	public long getId() {

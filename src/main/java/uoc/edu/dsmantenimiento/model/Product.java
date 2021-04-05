@@ -1,8 +1,5 @@
 package uoc.edu.dsmantenimiento.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,10 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "product")
@@ -29,16 +26,17 @@ public class Product {
 //	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Machine> machines;
 	
-	@JsonIgnore
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@ManyToOne()
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 	
 	public Product() {	}
 
-	public Product(String name) {
+	public Product(String name, Manufacturer manufacturer) {
 		super();
 		this.name = name;
+		this.manufacturer = manufacturer;
 	}
 	
 	public Product(long id, String name) {

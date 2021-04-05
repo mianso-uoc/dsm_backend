@@ -32,12 +32,30 @@ La aplicación se pondrá en marcha en <http://localhost:8080>.
 
 Se definen los siguientes métodos:
 
-    GET /api/manufacturers
-    
-    POST /api/manufacturers
-    
-    GET /api/manufacturers/{manufacturerId}
-    
-    PUT /api/manufacturers/{manufacturerId}
-    
-    DELETE /api/manufacturers/{manufacturerId}
+	GET ​/api​/users​/{id}
+	PUT ​/api​/users​/{id}
+	DELETE ​/api​/users​/{id}
+	GET ​/api​/users
+	POST ​/api​/users
+	
+
+	GET ​/api​/manufacturers
+	GET ​/api​/manufacturers​/{id}
+	POST ​/api​/manufacturers
+	PUT ​/api​/manufacturers​/{id}
+	DELETE ​/api​/manufacturers​/{id}
+	
+
+	GET ​/api​/products​/manufacturer​/{manufacturerId}
+	GET ​/api​/products​/{id}
+	POST ​/api​/products
+	PUT ​/api​/products​/{id}
+	DELETE ​/api​/products​/{id}
+	
+
+	GET ​/api​/provinces​/{id}
+	GET ​/api​/provinces​/{countryId}
+	GET ​/api​/countries
+	GET ​/api​/countries​/{id}
+	GET ​/api​/cities​/{provinceId}
+	GET ​/api​/cities​/{id}

@@ -91,7 +91,7 @@ public class CatalogController {
 		}
 	}
 	
-	@GetMapping("/products/manufacturer/{manufacturerId}")
+	@GetMapping("/manufacturers/{manufacturerId}/products")
 	public ResponseEntity<List<Product>> getProductsByManufacturer(@PathVariable("manufacturerId") long manufacturerId) {
 		try {
 			List<Product> products = productService.getProductsByManufacturer(manufacturerId);
@@ -120,7 +120,7 @@ public class CatalogController {
 	@PostMapping("/products")
 	public ResponseEntity<Product> createProduct(@RequestBody Product product) {
 		try {
-			Product _product = productService.editProduct(new Product(product.getName()));
+			Product _product = productService.editProduct(new Product(product.getName(), product.getManufacturer()));
 			return new ResponseEntity<>(_product, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -134,6 +134,7 @@ public class CatalogController {
 		if (productData.isPresent()) {
 			Product _product = productData.get();
 			_product.setName(product.getName());
+			_product.setManufacturer(product.getManufacturer());
 			return new ResponseEntity<>(productService.editProduct(_product), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

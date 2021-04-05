@@ -65,6 +65,7 @@ public class IssueService {
 		issue.setStatus(IssueStatus.SOLVED);
 		issue.setTotalPrice(totalPrice);
 		issue.setSolution(solution);
+		issue.setCloseDate(new Date());
 		this.editIssue(issue);
 	}
 	
@@ -72,6 +73,7 @@ public class IssueService {
 		Optional<Issue> optionalIssue = issueRepository.findById(id);
 		Issue issue = optionalIssue.get();
 		issue.setStatus(IssueStatus.CLOSED);
+		issue.setCloseDate(new Date());
 		this.editIssue(issue);
 	}
 	

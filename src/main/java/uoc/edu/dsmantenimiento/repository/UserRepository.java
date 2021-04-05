@@ -9,4 +9,9 @@ import uoc.edu.dsmantenimiento.model.User;
 public interface UserRepository<T extends User> extends JpaRepository<T, Long> {
 
 	List<User> findByName(String name);
+	
+	List<User> findByEmail(String email);
+	
+	Boolean existsByEmail(String email);
+	
 }

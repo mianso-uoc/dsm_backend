@@ -69,12 +69,14 @@ public class Issue {
 	
 	public Issue() {	}
 
-	public Issue(String title, String description) {
+	public Issue(String title, String description, Technician technician, Company company) {
 		super();
 		this.title = title;
 		this.description = description;
 		this.status = IssueStatus.PENDING;
 		this.createDate = new Date();
+		this.technician = technician;
+		this.company = company;
 	}
 
 	public long getId() {
@@ -171,6 +173,14 @@ public class Issue {
 
 	public void setTechnician(Technician technician) {
 		this.technician = technician;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	@Override

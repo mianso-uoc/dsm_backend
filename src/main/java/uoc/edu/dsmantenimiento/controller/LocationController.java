@@ -1,6 +1,7 @@
 package uoc.edu.dsmantenimiento.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +56,11 @@ public class LocationController {
 		if (country.isPresent()) {
 			return new ResponseEntity<>(country.get(), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 	
-	@GetMapping("/provinces/{countryId}")
+	@GetMapping("/countries/{countryId}/provinces")
 	public ResponseEntity<List<Province>> getProvinces(@PathVariable Long countryId) {
 		try {
 			List<Province> provinces = provinceService.getProvincesByCountry(countryId);
@@ -69,6 +70,9 @@ public class LocationController {
 			}
 
 			return new ResponseEntity<>(provinces, HttpStatus.OK);
+
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -81,11 +85,11 @@ public class LocationController {
 		if (province.isPresent()) {
 			return new ResponseEntity<>(province.get(), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 	
-	@GetMapping("/cities/{provinceId}")
+	@GetMapping("/provinces/{provinceId}/cities")
 	public ResponseEntity<List<City>> getCities(@PathVariable Long provinceId) {
 		try {
 			List<City> cities = cityService.getCitiesByProvince(provinceId);
@@ -95,6 +99,8 @@ public class LocationController {
 			}
 
 			return new ResponseEntity<>(cities, HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -107,7 +113,7 @@ public class LocationController {
 		if (province.isPresent()) {
 			return new ResponseEntity<>(province.get(), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 	

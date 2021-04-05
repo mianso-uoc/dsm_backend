@@ -36,10 +36,6 @@ public class UserController {
 	public ResponseEntity<List<User>> getUsers() {
 		try {
 			List<User> users = userService.getUsers();
-//			List<Administrator> administrators = userService.getAllAdministrators();
-//			List<Technician> technicians = userService.getAllTechnicians();
-//			List<User> users = new ArrayList<>();
-//			users.addAll(technicians);
 
 			if (users.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -58,7 +54,7 @@ public class UserController {
 		if (userData.isPresent()) {
 			return new ResponseEntity<>(userData.get(), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 
@@ -67,13 +63,13 @@ public class UserController {
 		try {
 			
 			if (Constants.TECHNICIAN.equals(user.getType())) {
-				Technician t = userService.editTechnician(new Technician(user.getName(), user.getEmail()));
+				Technician t = userService.editTechnician(new Technician(user.getName(), user.getEmail(), user.getPassword()));
 				return new ResponseEntity<>(t, HttpStatus.CREATED);
 			} else if (Constants.CUSTOMER.equals(user.getType()) && companyId != null){
-				Customer c = userService.editCustomer(new Customer(user.getName(), user.getEmail(), companyId));
+				Customer c = userService.editCustomer(new Customer(user.getName(), user.getEmail(), user.getPassword(), companyId));
 				return new ResponseEntity<>(c, HttpStatus.CREATED);
 			} else if (Constants.ADMIN.equals(user.getType())) {
-				Administrator a = userService.editAdministrator(new Administrator(user.getName(), user.getEmail()));
+				Administrator a = userService.editAdministrator(new Administrator(user.getName(), user.getPassword(), user.getEmail()));
 				return new ResponseEntity<>(a, HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,13 +85,17 @@ public class UserController {
 		try {
 			
 			if (Constants.TECHNICIAN.equals(user.getType())) {
-				Technician t = userService.editTechnician(new Technician(user.getId(), user.getName(), user.getEmail()));
+				Technician t = userService.editTechnician(new Technician(id, user.getEmail(), user.getName(), user.getPassword()));
 				return new ResponseEntity<>(t, HttpStatus.CREATED);
-			} else if (Constants.CUSTOMER.equals(user.getType()) && companyId != null){
-				Customer c = userService.editCustomer(new Customer(user.getId(), user.getName(), user.getEmail(), companyId));
+			} else if (Constants.CUSTOMER.equals(user.getType()) && companyId != null) {
+				Customer c = userService.editCustomer(new Customer(id, user.getEmail(), user.getName(), user.getPassword(), companyId));
+				return new ResponseEntity<>(c, HttpStatus.CREATED);
+			} else if (Constants.CUSTOMER.equals(user.getType())) {
+				Customer dbCustomer = userService.getCustomer(id).get();
+				Customer c = userService.editCustomer(new Customer(id, user.getEmail(), user.getName(), user.getPassword(), dbCustomer.getCompany().getId()));
 				return new ResponseEntity<>(c, HttpStatus.CREATED);
 			} else if (Constants.ADMIN.equals(user.getType())) {
-				Administrator a = userService.editAdministrator(new Administrator(user.getId(), user.getName(), user.getEmail()));
+				Administrator a = userService.editAdministrator(new Administrator(id, user.getEmail(), user.getName(), user.getPassword()));
 				return new ResponseEntity<>(a, HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -10,6 +10,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 @Entity
 @Table(name = "document")
 public class Document {
@@ -25,6 +28,7 @@ public class Document {
 	@Column(name = "file")
 	private byte[] file;
 	
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@ManyToOne()
     @JoinColumn(name = "issue_id")
     private Issue issue;
@@ -35,11 +39,12 @@ public class Document {
 	
 	public Document() {	}
 
-	public Document(String fileName, byte[] file, Issue issue) {
+	public Document(String fileName, byte[] file, Issue issue, Technician technician) {
 		super();
 		this.fileName = fileName;
 		this.file = file;
 		this.issue = issue;
+		this.technician = technician;
 	}
 
 	public long getId() {
@@ -72,6 +77,14 @@ public class Document {
 
 	public void setIssue(Issue issue) {
 		this.issue = issue;
+	}
+
+	public Technician getTechnician() {
+		return technician;
+	}
+
+	public void setTechnician(Technician technician) {
+		this.technician = technician;
 	}
 
 	@Override

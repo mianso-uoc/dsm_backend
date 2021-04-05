@@ -75,6 +75,11 @@ public class CustomerController {
 		if (companyData.isPresent()) {
 			Company _company = companyData.get();
 			_company.setName(company.getName());
+			_company.setAddress(company.getAddress());
+			_company.setCity(company.getCity());
+			_company.setPhone(company.getPhone());
+			_company.setLatitude(company.getLatitude());
+			_company.setLongitude(company.getLongitude());
 			return new ResponseEntity<>(companyService.editCompany(_company), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -85,13 +90,13 @@ public class CustomerController {
 	public ResponseEntity<HttpStatus> deleteCompany(@PathVariable("id") long id) {
 		try {
 			companyService.deleteCompany(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 	
-	@GetMapping("/machines/company/{companyId}")
+	@GetMapping("/companies/{companyId}/machines")
 	public ResponseEntity<List<Machine>> getMachinesByCompany(@PathVariable("companyId") long companyId) {
 		try {
 			Optional<Company> company = companyService.getCompany(companyId);
@@ -148,9 +153,9 @@ public class CustomerController {
 	public ResponseEntity<HttpStatus> deleteMachine(@PathVariable("id") long id) {
 		try {
 			machineService.deleteMachine(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 	

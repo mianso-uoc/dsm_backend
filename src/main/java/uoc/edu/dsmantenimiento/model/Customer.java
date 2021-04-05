@@ -15,23 +15,23 @@ public class Customer extends User {
 		super();
 	}
 
-	public Customer(String email, String name) {
-		super(email, name);
+	public Customer(String email, String name, String password) {
+		super(email, name, password);
 	}
 	
-	public Customer(long id, String email, String name) {
-		super(id, email, name);
+	public Customer(long id, String email, String name, String password) {
+		super(id, email, name, password);
 	}
 	
-	public Customer(String email, String name, long companyId) {
-		super(email, name);
+	public Customer(String email, String name, String password, long companyId) {
+		super(email, name, password);
 		Company c = new Company();
 		c.setId(companyId);
 		this.company = c;
 	}
 
-	public Customer(long id, String email, String name, long companyId) {
-		super(id, email, name);
+	public Customer(long id, String email, String name, String password, long companyId) {
+		super(id, email, name, password);
 		Company c = new Company();
 		c.setId(companyId);
 		this.company = c;
