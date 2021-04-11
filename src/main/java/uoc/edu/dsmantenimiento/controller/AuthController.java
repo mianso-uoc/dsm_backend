@@ -49,7 +49,7 @@ public class AuthController {
 		
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-		return ResponseEntity.ok(new JwtResponse(jwt,  userDetails.getId(), userDetails.getEmail()));
+		return ResponseEntity.ok(new JwtResponse(jwt,  userDetails.getId(), userDetails.getEmail(), userDetails.getName(), userDetails.getType()));
 	}
 
 }

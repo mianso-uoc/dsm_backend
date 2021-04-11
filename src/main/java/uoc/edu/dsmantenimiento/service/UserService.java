@@ -31,6 +31,10 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
+	public List<User> getUsersByType(String type) {
+		return userRepository.findByType(type);
+	}
+	
 	public List<Administrator> getAdministrators() {
 		return adminRepository.findAll();
 	}

@@ -1,5 +1,6 @@
 package uoc.edu.dsmantenimiento.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,21 @@ public class UserController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@GetMapping("/users/type/{type}")
+	public ResponseEntity<List<User>> getUsersByType(@PathVariable String type) {
+		try {
+			List<User> users = userService.getUsersByType(type);
+
+			if (users.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(users, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@GetMapping("/users/{id}")
 	public ResponseEntity<User> getUser(@PathVariable("id") long id) {
@@ -63,13 +79,13 @@ public class UserController {
 		try {
 			
 			if (Constants.TECHNICIAN.equals(user.getType())) {
-				Technician t = userService.editTechnician(new Technician(user.getName(), user.getEmail(), user.getPassword()));
+				Technician t = userService.editTechnician(new Technician(user.getEmail(), user.getName(), user.getPassword()));
 				return new ResponseEntity<>(t, HttpStatus.CREATED);
 			} else if (Constants.CUSTOMER.equals(user.getType()) && companyId != null){
-				Customer c = userService.editCustomer(new Customer(user.getName(), user.getEmail(), user.getPassword(), companyId));
+				Customer c = userService.editCustomer(new Customer(user.getEmail(), user.getName(), user.getPassword(), companyId));
 				return new ResponseEntity<>(c, HttpStatus.CREATED);
 			} else if (Constants.ADMIN.equals(user.getType())) {
-				Administrator a = userService.editAdministrator(new Administrator(user.getName(), user.getPassword(), user.getEmail()));
+				Administrator a = userService.editAdministrator(new Administrator(user.getEmail(), user.getName(), user.getPassword()));
 				return new ResponseEntity<>(a, HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
