@@ -32,15 +32,23 @@ public class IssueService {
 	@Autowired
 	private MachineService machineService;
 	
+	@Transactional
+	public List<Issue> getIssues() {
+		return issueRepository.findAll();
+	}
+	
+	@Transactional
 	public List<Issue> getIssues(Date startDate, Date endDate) {
 		return issueRepository.findAll();
 	}
 	
+	@Transactional
 	public List<Issue> getIssuesByCompany(long companyId) {
 		Optional<Company> company = companyService.getCompany(companyId);
 		return issueRepository.findByCompany(company.get());
 	}
 	
+	@Transactional
 	public List<Issue> getIssuesByTechnician(long technicianId) {
 		Optional<User> user = userService.getUser(technicianId);
 		if (user.get() instanceof Technician) {
@@ -51,6 +59,7 @@ public class IssueService {
 		}
 	}
 	
+	@Transactional
 	public Optional<Issue> getIssue(Long id) {
 		return issueRepository.findById(id);
 	}

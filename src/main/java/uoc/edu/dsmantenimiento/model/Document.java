@@ -24,6 +24,9 @@ public class Document {
 	@Column(name = "fileName")
 	private String fileName;
 	
+	@Column(name = "mimetype")
+	private String mimetype;
+	
 	@Lob
 	@Column(name = "file")
 	private byte[] file;
@@ -61,6 +64,14 @@ public class Document {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getMimetype() {
+		return mimetype;
+	}
+
+	public void setMimetype(String mimetype) {
+		this.mimetype = mimetype;
 	}
 
 	public byte[] getFile() {

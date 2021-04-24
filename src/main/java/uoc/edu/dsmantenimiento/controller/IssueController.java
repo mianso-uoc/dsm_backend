@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ import uoc.edu.dsmantenimiento.service.CommentService;
 import uoc.edu.dsmantenimiento.service.DocumentService;
 import uoc.edu.dsmantenimiento.service.IssueService;
 
-@CrossOrigin(origins = "http://localhost:8082")
+@CrossOrigin(origins = {"http://localhost:8082", "https://dsm-frontend.herokuapp.com"})
 @RestController
 @RequestMapping("/api")
 public class IssueController {
@@ -39,6 +40,21 @@ public class IssueController {
 	@Autowired
 	CommentService commentService;
 
+	@GetMapping("/issues")
+	public ResponseEntity<List<Issue>> getIssues() {
+		try {
+			List<Issue> issues = issueService.getIssues();
+
+			if (issues.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(issues, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@GetMapping("/issues/{startDate}/{endDate}")
 	public ResponseEntity<List<Issue>> getIssuesByCompany(@PathVariable @DateTimeFormat(iso=ISO.DATE) Date startDate, @PathVariable @DateTimeFormat(iso=ISO.DATE) Date endDate) {
 		try {
@@ -79,6 +95,22 @@ public class IssueController {
 			}
 
 			return new ResponseEntity<>(issues, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/issues/{issueId}/documents")
+	public ResponseEntity<List<Document>> getDocumentsByIssue(@PathVariable Long issueId) {
+		try {
+			Optional<Issue> issue = issueService.getIssue(issueId);
+			List<Document> documents = documentService.getDocuments(issue.get());
+
+			if (documents.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(documents, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -157,7 +189,7 @@ public class IssueController {
 	}
 	
 	@PostMapping("/issues/{id}/documents")
-	public ResponseEntity<Document> createProduct(@PathVariable Long id, @RequestBody Document document) {
+	public ResponseEntity<Document> createDocument(@PathVariable Long id, @RequestBody Document document) {
 		try {
 			Optional<Issue> issue = issueService.getIssue(id);
 			if (issue.isPresent()) {
@@ -179,6 +211,16 @@ public class IssueController {
 			return new ResponseEntity<>(documentData.get(), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@DeleteMapping("/documents/{id}")
+	public ResponseEntity<HttpStatus> deleteDocument(@PathVariable("id") long id) {
+		try {
+			documentService.deleteDocument(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 

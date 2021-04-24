@@ -1,6 +1,5 @@
 package uoc.edu.dsmantenimiento.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ import uoc.edu.dsmantenimiento.model.Technician;
 import uoc.edu.dsmantenimiento.model.User;
 import uoc.edu.dsmantenimiento.service.UserService;
 
-@CrossOrigin(origins = "http://localhost:8082")
+@CrossOrigin(origins = {"http://localhost:8082", "https://dsm-frontend.herokuapp.com"})
 @RestController
 @RequestMapping("/api")
 public class UserController {
