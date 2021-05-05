@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -57,6 +58,7 @@ public class Issue {
     private Set<Machine> machines;
 	
 	@OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OrderBy("id")
     private List<Comment> comments;
 	
 	@JsonProperty(access = Access.WRITE_ONLY)
