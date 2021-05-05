@@ -42,12 +42,13 @@ public class Document {
 	
 	public Document() {	}
 
-	public Document(String fileName, byte[] file, Issue issue, Technician technician) {
+	public Document(String fileName, byte[] file, Issue issue, Technician technician, String mimetype) {
 		super();
 		this.fileName = fileName;
 		this.file = file;
 		this.issue = issue;
 		this.technician = technician;
+		this.mimetype = mimetype;
 	}
 
 	public long getId() {
