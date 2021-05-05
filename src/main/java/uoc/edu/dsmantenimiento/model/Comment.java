@@ -20,7 +20,7 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@Column(name = "text")
+	@Column(name = "text", length = 1000)
 	private String text;
 	
 	@JsonProperty(access = Access.WRITE_ONLY)
