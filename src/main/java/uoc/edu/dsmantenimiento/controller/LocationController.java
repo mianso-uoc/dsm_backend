@@ -20,7 +20,7 @@ import uoc.edu.dsmantenimiento.service.CityService;
 import uoc.edu.dsmantenimiento.service.CountryService;
 import uoc.edu.dsmantenimiento.service.ProvinceService;
 
-@CrossOrigin(origins = {"http://localhost:8082", "https://dsm-frontend.herokuapp.com"})
+@CrossOrigin(origins = "http://localhost:8082")
 @RestController
 @RequestMapping("/api")
 public class LocationController {

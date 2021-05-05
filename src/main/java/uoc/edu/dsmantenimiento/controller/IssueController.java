@@ -26,7 +26,7 @@ import uoc.edu.dsmantenimiento.service.CommentService;
 import uoc.edu.dsmantenimiento.service.DocumentService;
 import uoc.edu.dsmantenimiento.service.IssueService;
 
-@CrossOrigin(origins = {"http://localhost:8082", "https://dsm-frontend.herokuapp.com"})
+@CrossOrigin(origins = "http://localhost:8082")
 @RestController
 @RequestMapping("/api")
 public class IssueController {
@@ -193,7 +193,7 @@ public class IssueController {
 		try {
 			Optional<Issue> issue = issueService.getIssue(id);
 			if (issue.isPresent()) {
-				Document _document = documentService.editDocument(new Document(document.getFileName(), document.getFile(), issue.get(), document.getTechnician()));
+				Document _document = documentService.editDocument(new Document(document.getFileName(), document.getFile(), issue.get(), document.getTechnician(), document.getMimetype()));
 				return new ResponseEntity<>(_document, HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -240,7 +240,7 @@ public class IssueController {
 	}
 	
 	@GetMapping("/comments/{id}")
-	public ResponseEntity<Comment> getCommentsById(@PathVariable("id") long id) {
+	public ResponseEntity<Comment> getCommentById(@PathVariable("id") long id) {
 		Optional<Comment> commentData = commentService.getComment(id);
 
 		if (commentData.isPresent()) {

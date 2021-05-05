@@ -24,7 +24,7 @@ import uoc.edu.dsmantenimiento.model.Technician;
 import uoc.edu.dsmantenimiento.model.User;
 import uoc.edu.dsmantenimiento.service.UserService;
 
-@CrossOrigin(origins = {"http://localhost:8082", "https://dsm-frontend.herokuapp.com"})
+@CrossOrigin(origins = "http://localhost:8082")
 @RestController
 @RequestMapping("/api")
 public class UserController {
