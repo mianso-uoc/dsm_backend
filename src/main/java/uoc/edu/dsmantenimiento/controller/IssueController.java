@@ -26,7 +26,7 @@ import uoc.edu.dsmantenimiento.service.CommentService;
 import uoc.edu.dsmantenimiento.service.DocumentService;
 import uoc.edu.dsmantenimiento.service.IssueService;
 
-@CrossOrigin(origins = "http://localhost:8082")
+@CrossOrigin(origins = {"http://localhost:8082", "https://dsm-frontend.herokuapp.com"})
 @RestController
 @RequestMapping("/api")
 public class IssueController {
