@@ -12,8 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "city")
@@ -29,13 +28,15 @@ public class City {
 	@Column(name = "name")
 	private String name;
 	
-	@JsonIgnore
 	@ManyToOne()
     @JoinColumn(name = "province_id")
     private Province province;
 	
 	@OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Company> companies;
+	
+	@Transient
+	private Country country;
 	
 	public City() {	}
 
@@ -67,6 +68,10 @@ public class City {
 
 	public void setProvince(Province province) {
 		this.province = province;
+	}
+
+	public Country getCountry() {
+		return province.getCountry();
 	}
 
 	@Override

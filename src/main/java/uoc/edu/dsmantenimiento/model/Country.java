@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 @Entity
 @Table(name = "country")
 public class Country {
@@ -25,6 +28,7 @@ public class Country {
 	@Column(name = "iso")
 	private String iso;
 	
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Province> provinces;
 	
