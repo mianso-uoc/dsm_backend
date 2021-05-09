@@ -1,12 +1,11 @@
 package uoc.edu.dsmantenimiento.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -56,9 +55,51 @@ public class IssueController {
 	}
 	
 	@GetMapping("/issues/{startDate}/{endDate}")
-	public ResponseEntity<List<Issue>> getIssuesByCompany(@PathVariable @DateTimeFormat(iso=ISO.DATE) Date startDate, @PathVariable @DateTimeFormat(iso=ISO.DATE) Date endDate) {
+	public ResponseEntity<List<Issue>> getIssuesByDate(@PathVariable Long startDate, @PathVariable Long endDate) {
 		try {
-			List<Issue> issues = issueService.getIssues(startDate, endDate);
+			Date start = null;
+			Date end = null;
+			
+			if (startDate != null) {
+				start = new Date();
+				start.setTime(startDate);
+			}
+			
+			if (endDate != null) {
+				end = new Date();
+				end.setTime(endDate);
+			}
+			
+			List<Issue> issues = issueService.getIssues(null, start, end);
+
+			if (issues.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(issues, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/issues/{startDate}/{endDate}/{companyId}")
+	public ResponseEntity<List<Issue>> findIssues(@PathVariable(required = false) Long startDate, @PathVariable(required = false) Long endDate, @PathVariable(required = false) Long companyId) {
+		try {
+			
+			Date start = null;
+			Date end = null;
+			
+			if (startDate != null) {
+				start = new Date();
+				start.setTime(startDate);
+			}
+			
+			if (endDate != null) {
+				end = new Date();
+				end.setTime(endDate);
+			}
+			
+			List<Issue> issues = issueService.getIssues(companyId, start, end);
 
 			if (issues.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -71,9 +112,9 @@ public class IssueController {
 	}
 	
 	@GetMapping("/issues/company/{companyId}")
-	public ResponseEntity<List<Issue>> getIssuesByCompany(@PathVariable Long companyId) {
+	public ResponseEntity<List<Issue>> findIssuesByCompany(@PathVariable Long companyId) {
 		try {
-			List<Issue> issues = issueService.getIssuesByCompany(companyId);
+			List<Issue> issues = issueService.getIssues(companyId, null, null);
 
 			if (issues.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);

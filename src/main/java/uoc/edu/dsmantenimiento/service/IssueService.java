@@ -16,12 +16,16 @@ import uoc.edu.dsmantenimiento.model.Technician;
 import uoc.edu.dsmantenimiento.model.User;
 import uoc.edu.dsmantenimiento.model.enums.IssueStatus;
 import uoc.edu.dsmantenimiento.repository.IssueRepository;
+import uoc.edu.dsmantenimiento.repository.IssueRepositoryCustom;
 
 @Service
 public class IssueService {
 
 	@Autowired
 	private IssueRepository issueRepository;
+	
+	@Autowired
+	private IssueRepositoryCustom searchIssueRepository;
 	
 	@Autowired
 	private CompanyService companyService;
@@ -38,14 +42,14 @@ public class IssueService {
 	}
 	
 	@Transactional
-	public List<Issue> getIssues(Date startDate, Date endDate) {
-		return issueRepository.findAll();
-	}
-	
-	@Transactional
-	public List<Issue> getIssuesByCompany(long companyId) {
+	public List<Issue> getIssues(Long companyId, Date startDate, Date endDate) {
 		Optional<Company> company = companyService.getCompany(companyId);
-		return issueRepository.findByCompany(company.get());
+		if (company.isPresent()) {
+			return searchIssueRepository.find(company.get(), startDate, endDate);
+		} else {
+			return null;
+		}
+		
 	}
 	
 	@Transactional
