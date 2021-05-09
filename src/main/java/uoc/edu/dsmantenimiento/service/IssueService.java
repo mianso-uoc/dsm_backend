@@ -43,12 +43,19 @@ public class IssueService {
 	
 	@Transactional
 	public List<Issue> getIssues(Long companyId, Date startDate, Date endDate) {
-		Optional<Company> company = companyService.getCompany(companyId);
-		if (company.isPresent()) {
-			return searchIssueRepository.find(company.get(), startDate, endDate);
-		} else {
-			return null;
+		
+		Company company = null;
+		
+		if (companyId != null) {
+			Optional<Company> findCompany = companyService.getCompany(companyId);
+			if (findCompany.isPresent()) {
+				company = findCompany.get();
+			} else {
+				return null;
+			}
 		}
+		
+		return searchIssueRepository.find(company, startDate, endDate);
 		
 	}
 	
