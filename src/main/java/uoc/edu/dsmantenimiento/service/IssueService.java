@@ -109,4 +109,16 @@ public class IssueService {
 		this.editIssue(issue);
 	}
 	
+	@Transactional
+	public void removeMachineFromIssue(Long idIssue, Long idMachine) {
+		Optional<Issue> optionalIssue = issueRepository.findById(idIssue);
+		Optional<Machine> optionalMachine = machineService.getMachine(idMachine);
+		
+		Issue issue = optionalIssue.get();
+		Machine machine = optionalMachine.get();
+		machine.getIssues().remove(issue);
+		issue.getMachines().remove(machine);
+		this.editIssue(issue);
+	}
+	
 }

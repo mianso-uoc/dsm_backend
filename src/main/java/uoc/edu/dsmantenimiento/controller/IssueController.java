@@ -31,12 +31,6 @@ public class IssueController {
 
 	@Autowired
 	IssueService issueService;
-	
-	@Autowired
-	DocumentService documentService;
-	
-	@Autowired
-	CommentService commentService;
 
 	@GetMapping("/issues")
 	public ResponseEntity<List<Issue>> getIssues() {
@@ -139,22 +133,6 @@ public class IssueController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@GetMapping("/issues/{issueId}/documents")
-	public ResponseEntity<List<Document>> getDocumentsByIssue(@PathVariable Long issueId) {
-		try {
-			Optional<Issue> issue = issueService.getIssue(issueId);
-			List<Document> documents = documentService.getDocuments(issue.get());
-
-			if (documents.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-
-			return new ResponseEntity<>(documents, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
 
 	@GetMapping("/issues/{id}")
 	public ResponseEntity<Issue> getIssueById(@PathVariable("id") long id) {
@@ -228,65 +206,13 @@ public class IssueController {
 		}
 	}
 	
-	@PostMapping("/issues/{id}/documents")
-	public ResponseEntity<Document> createDocument(@PathVariable Long id, @RequestBody Document document) {
+	@DeleteMapping("/issues/{issueId}/machine/{machineId}")
+	public ResponseEntity<HttpStatus> removeMachineFromIssue(@PathVariable("issueId") long issueId, @PathVariable("machineId") long machineId) {
 		try {
-			Optional<Issue> issue = issueService.getIssue(id);
-			if (issue.isPresent()) {
-				Document _document = documentService.editDocument(new Document(document.getFileName(), document.getFile(), issue.get(), document.getTechnician(), document.getMimetype()));
-				return new ResponseEntity<>(_document, HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
-	@GetMapping("/documents/{id}")
-	public ResponseEntity<Document> getDocumentById(@PathVariable("id") long id) {
-		Optional<Document> documentData = documentService.getDocument(id);
-
-		if (documentData.isPresent()) {
-			return new ResponseEntity<>(documentData.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-	
-	@DeleteMapping("/documents/{id}")
-	public ResponseEntity<HttpStatus> deleteDocument(@PathVariable("id") long id) {
-		try {
-			documentService.deleteDocument(id);
+			issueService.removeMachineFromIssue(issueId, machineId);;
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-	}
-
-	@PostMapping("/issues/{id}/comments")
-	public ResponseEntity<Comment> createComment(@PathVariable Long id, @RequestBody Comment comment) {
-		try {
-			Optional<Issue> issue = issueService.getIssue(id);
-			if (issue.isPresent()) {
-				Comment _comment = commentService.editComment(new Comment(comment.getText(), issue.get(), comment.getUser()));
-				return new ResponseEntity<>(_comment, HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
-	@GetMapping("/comments/{id}")
-	public ResponseEntity<Comment> getCommentById(@PathVariable("id") long id) {
-		Optional<Comment> commentData = commentService.getComment(id);
-
-		if (commentData.isPresent()) {
-			return new ResponseEntity<>(commentData.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	

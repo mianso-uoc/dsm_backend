@@ -18,78 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import uoc.edu.dsmantenimiento.model.Manufacturer;
 import uoc.edu.dsmantenimiento.model.Product;
-import uoc.edu.dsmantenimiento.service.ManufacturerService;
 import uoc.edu.dsmantenimiento.service.ProductService;
 
 @CrossOrigin(origins = {"http://localhost:8082", "https://dsm-frontend.herokuapp.com"})
 @RestController
 @RequestMapping("/api")
-public class CatalogController {
-
-	@Autowired
-	ManufacturerService manufacturerService;
+public class ProductController {
 	
 	@Autowired
 	ProductService productService;
-
-	@GetMapping("/manufacturers")
-	public ResponseEntity<List<Manufacturer>> getAllManufacturers() {
-		try {
-			List<Manufacturer> manufacturers = manufacturerService.getManufacturers();
-
-			if (manufacturers.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-
-			return new ResponseEntity<>(manufacturers, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@GetMapping("/manufacturers/{id}")
-	public ResponseEntity<Manufacturer> getManufacturerById(@PathVariable("id") long id) {
-		Optional<Manufacturer> manufacturerData = manufacturerService.getManufacturer(id);
-
-		if (manufacturerData.isPresent()) {
-			return new ResponseEntity<>(manufacturerData.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@PostMapping("/manufacturers")
-	public ResponseEntity<Manufacturer> createManufacturer(@RequestBody Manufacturer manufacturer) {
-		try {
-			Manufacturer _manufacturer = manufacturerService.editManufacturer(new Manufacturer(manufacturer.getName()));
-			return new ResponseEntity<>(_manufacturer, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@PutMapping("/manufacturers/{id}")
-	public ResponseEntity<Manufacturer> updateManufacturer(@PathVariable("id") long id, @RequestBody Manufacturer manufacturer) {
-		Optional<Manufacturer> manufacturerData = manufacturerService.getManufacturer(id);
-
-		if (manufacturerData.isPresent()) {
-			Manufacturer _manufacturer = manufacturerData.get();
-			_manufacturer.setName(manufacturer.getName());
-			return new ResponseEntity<>(manufacturerService.editManufacturer(_manufacturer), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@DeleteMapping("/manufacturers/{id}")
-	public ResponseEntity<HttpStatus> deleteManufacturer(@PathVariable("id") long id) {
-		try {
-			manufacturerService.deleteManufacturer(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
 	
 	@GetMapping("/manufacturers/{manufacturerId}/products")
 	public ResponseEntity<List<Product>> getProductsByManufacturer(@PathVariable("manufacturerId") long manufacturerId) {
@@ -116,6 +53,17 @@ public class CatalogController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/manufacturers/products/{id}")
+	public ResponseEntity<Manufacturer> getManufacturer(@PathVariable("id") long id) {
+		Optional<Product> product = productService.getProduct(id);
+
+		if (product.isPresent()) {
+			return new ResponseEntity<>(product.get().getManufacturer(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
 	@PostMapping("/products")
 	public ResponseEntity<Product> createProduct(@RequestBody Product product) {
@@ -134,7 +82,6 @@ public class CatalogController {
 		if (productData.isPresent()) {
 			Product _product = productData.get();
 			_product.setName(product.getName());
-			_product.setManufacturer(product.getManufacturer());
 			return new ResponseEntity<>(productService.editProduct(_product), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
