@@ -89,6 +89,18 @@ public class LocationController {
 		}
 	}
 	
+	@GetMapping("/provinces/cities/{id}")
+	public ResponseEntity<Province> getProvinceByCityId(@PathVariable("id") long id) {
+		Optional<City> city = cityService.getCity(id);
+		Optional<Province> province = provinceService.getProvince(city.get().getProvince().getId());
+
+		if (province.isPresent()) {
+			return new ResponseEntity<>(province.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
 	@GetMapping("/provinces/{provinceId}/cities")
 	public ResponseEntity<List<City>> getCities(@PathVariable Long provinceId) {
 		try {

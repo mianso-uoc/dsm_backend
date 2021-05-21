@@ -17,11 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import uoc.edu.dsmantenimiento.model.Comment;
-import uoc.edu.dsmantenimiento.model.Document;
 import uoc.edu.dsmantenimiento.model.Issue;
-import uoc.edu.dsmantenimiento.service.CommentService;
-import uoc.edu.dsmantenimiento.service.DocumentService;
 import uoc.edu.dsmantenimiento.service.IssueService;
 
 @CrossOrigin(origins = {"http://localhost:8082", "https://dsm-frontend.herokuapp.com"})
