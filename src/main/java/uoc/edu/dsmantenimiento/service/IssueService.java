@@ -38,7 +38,7 @@ public class IssueService {
 	
 	@Transactional
 	public List<Issue> getIssues() {
-		return issueRepository.findAll();
+		return issueRepository.findAllByOrderByIdDesc();
 	}
 	
 	@Transactional
@@ -64,7 +64,7 @@ public class IssueService {
 		Optional<User> user = userService.getUser(technicianId);
 		if (user.get() instanceof Technician) {
 			Technician technician = (Technician) user.get();
-			return issueRepository.findByTechnician(technician);
+			return issueRepository.findByTechnicianOrderByIdDesc(technician);
 		} else {
 			return null;
 		}

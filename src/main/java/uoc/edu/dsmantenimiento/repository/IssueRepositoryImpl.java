@@ -50,7 +50,7 @@ public class IssueRepositoryImpl implements IssueRepositoryCustom {
 		}
 		
 		if (company != null || startDate != null || endDate != null) {
-			hql.append(where);
+			hql.append(where).append(" order by e.id desc");
 		}
 		
 		Query query = em.createNativeQuery(hql.toString(), Issue.class);

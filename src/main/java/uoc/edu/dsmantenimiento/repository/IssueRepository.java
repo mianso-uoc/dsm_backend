@@ -9,6 +9,8 @@ import uoc.edu.dsmantenimiento.model.Technician;
 
 public interface IssueRepository extends JpaRepository<Issue, Long> {
 
-	List<Issue> findByTechnician(Technician technician);
+	List<Issue> findByTechnicianOrderByIdDesc(Technician technician);
+	
+	List<Issue> findAllByOrderByIdDesc();
 
 }
