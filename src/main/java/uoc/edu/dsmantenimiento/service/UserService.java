@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import uoc.edu.dsmantenimiento.model.Administrator;
 import uoc.edu.dsmantenimiento.model.Customer;
@@ -26,6 +28,9 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository<Customer> customerRepository;
+	
+	@Autowired
+	PasswordEncoder encoder;
 
 	public List<User> getUsers() {
 		return userRepository.findAll();
@@ -60,14 +65,38 @@ public class UserService {
 	}
 	
 	public Technician editTechnician(Technician technician) {
+		
+		if (!StringUtils.hasLength(technician.getPassword())) {
+			technician.setPassword(getUser(technician.getId()).get().getPassword());
+		} else {
+			String encoded = encoder.encode(technician.getPassword());
+			technician.setPassword(encoded);
+		}
+		
 		return technicianRepository.save(technician);
 	}
 	
 	public Customer editCustomer(Customer customer) {
+		
+		if (!StringUtils.hasLength(customer.getPassword())) {
+			customer.setPassword(getUser(customer.getId()).get().getPassword());
+		} else {
+			String encoded = encoder.encode(customer.getPassword());
+			customer.setPassword(encoded);
+		}
+		
 		return customerRepository.save(customer);
 	}
 	
 	public Administrator editAdministrator(Administrator administrator) {
+		
+		if (!StringUtils.hasLength(administrator.getPassword())) {
+			administrator.setPassword(getUser(administrator.getId()).get().getPassword());
+		} else {
+			String encoded = encoder.encode(administrator.getPassword());
+			administrator.setPassword(encoded);
+		}
+		
 		return adminRepository.save(administrator);
 	}
 	
