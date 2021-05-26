@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.jsonwebtoken.lang.Collections;
 import uoc.edu.dsmantenimiento.Constants;
 import uoc.edu.dsmantenimiento.model.Administrator;
 import uoc.edu.dsmantenimiento.model.Customer;
@@ -76,6 +77,10 @@ public class UserController {
 	@PostMapping("/users")
 	public ResponseEntity<User> createUser(@RequestBody User user, @RequestParam(required = false) Long companyId) {
 		try {
+			
+			if (!Collections.isEmpty(userService.getUserByEmail(user.getEmail()))) {
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 			
 			if (Constants.TECHNICIAN.equals(user.getType())) {
 				Technician t = userService.editTechnician(new Technician(user.getEmail(), user.getName(), user.getPassword()));
